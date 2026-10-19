@@ -53,18 +53,17 @@ function Home() {
     if (reduce) return;
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from("[data-nav]", { opacity: 0, y: -8, duration: 0.4 })
-        .from("[data-hi] > span", { yPercent: 110, duration: 0.6, stagger: 0.06 }, "-=0.15")
-        .from("[data-hl]", { "--hl-scale": 0, duration: 0.5 }, "-=0.25")
+      tl.from("[data-hi] > span", { yPercent: 110, duration: 0.6, stagger: 0.06 }, "-=0.15")
+        .fromTo("[data-hl]", { "--hl-scale": 0 }, { "--hl-scale": 1, duration: 0.5 }, "-=0.25")
         .from("[data-hl-text]", { opacity: 0, y: 12, duration: 0.4 }, "<")
         .from("[data-sub]", { opacity: 0, y: 14, duration: 0.45 }, "-=0.2")
         .from("[data-photo]", { opacity: 0, y: 30, rotation: 8, duration: 0.7 }, "-=0.5")
-        .from("[data-card]", { opacity: 0, y: 50, rotation: (i) => [-6, 4, 7][i], duration: 0.6, stagger: 0.08 }, "-=0.45")
+        .from("[data-card]", { opacity: 0, y: 50, rotation: (i: number) => [-6, 4, 7][i] ?? 0, duration: 0.6, stagger: 0.08 }, "-=0.45")
         .from("[data-deco]", { opacity: 0, scale: 0.4, duration: 0.5, stagger: 0.03 }, "-=0.4");
 
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
         gsap.from(el, {
-          opacity: 0, y: 40, rotation: parseFloat(el.dataset.reveal || "0"), duration: 0.9, ease: "power3.out",
+          opacity: 0, y: 40, rotation: parseFloat(el.dataset["reveal"] || "0"), duration: 0.9, ease: "power3.out",
           scrollTrigger: { trigger: el, start: "top 88%" },
         });
       });
@@ -89,7 +88,7 @@ function Home() {
             <p className="label-mono mb-8 flex items-center gap-2 text-muted-foreground">
               <Spark className="h-4 w-4 animate-spin-slow text-coral" /> Portfolio · Vol. 01 · 2026
             </p>
-            <h1 className="font-display text-[clamp(2.8rem,7.4vw,6.6rem)] font-normal leading-[0.98] tracking-[-0.03em]">
+            <h1 className="font-display text-[clamp(2.6rem,6.2vw,5.8rem)] font-normal leading-[0.98] tracking-[-0.03em]">
               <span data-hi className="block overflow-hidden pb-1">
                 <span className="inline-block">Hi,</span> <span className="inline-block">I'm</span>{" "}
                 <span className="inline-block italic">Arfa</span>
@@ -139,7 +138,7 @@ function Home() {
               {Array.from({ length: 9 }).map((_, i) => <span key={i} className={`h-3 w-3 rounded-[3px] border border-ink ${i % 4 === 0 ? "bg-ink" : ""}`} />)}
             </div>
           </IdentityCard>
-          <IdentityCard n="02" title="Exploring AI" art="var(--art-ai)" tilt="rotate-1" offset="md:-mx-4 md:mt-16 z-10" depth={2.5}>
+          <IdentityCard n="02" title="Exploring AI" art="var(--art-ai)" tilt="rotate-1" offset="md:-mx-2 md:mt-16 z-10" depth={2.5}>
             <svg viewBox="0 0 200 110" className="absolute inset-x-5 top-5 h-28 text-ink" aria-hidden>
               <g fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                 <path d="M30 70 L80 30 L130 60 L170 25 M80 30 L95 85 L130 60" strokeDasharray="4 5" />

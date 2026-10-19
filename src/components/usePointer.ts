@@ -9,8 +9,8 @@ export function usePointerDepth(root: RefObject<HTMLElement | null>) {
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const items = Array.from(el.querySelectorAll<HTMLElement>("[data-depth]")).map((node) => {
-      const d = parseFloat(node.dataset.depth || "1");
-      const r = parseFloat(node.dataset.rot || "0");
+      const d = parseFloat(node.dataset["depth"] || "1");
+      const r = parseFloat(node.dataset["rot"] || "0");
       return {
         d, r,
         x: gsap.quickTo(node, "x", { duration: 1.2, ease: "power3.out" }),
