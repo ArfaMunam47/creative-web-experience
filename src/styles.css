@@ -226,7 +226,7 @@
 .punctuation-7 { left: 83%; top: 78%; color: var(--pink); }
 .punctuation-8 { left: 65%; top: 89%; color: var(--coral); }
 .punctuation-9 { left: 34%; top: 85%; color: var(--sky); }
-.work-section { border-top: 1px solid var(--border); }
+.work-section { border-top: 1px solid var(--border); scroll-margin-top: 62px; }
 .work-heading { position: relative; text-align: center; padding: 54px 24px 44px; }
 .work-heading h2 { font-size: 41px; line-height: 1.15; }
 .work-heading p { margin-top: 13px; font-size: 9px; }
@@ -308,6 +308,7 @@
   .hero-bottom { font-size: 8px; padding-block: 20px; align-items: center; }
   .hero-bottom > span { max-width: 135px; line-height: 1.7; }
   .hero-bottom a { white-space: nowrap; }
+  .work-section { scroll-margin-top: 56px; }
   .work-heading { padding-block: 41px 32px; } .work-heading h2 { font-size: 33px; }
   .work-heading svg { width: 23px; left: calc(50% - 145px); top: 46px; }
   .project-grid { grid-template-columns: minmax(0,1fr); }
