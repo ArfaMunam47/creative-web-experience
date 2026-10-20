@@ -28,6 +28,13 @@ export function usePointerDepth(root: RefObject<HTMLElement | null>) {
       }
     };
     window.addEventListener("pointermove", onMove);
-    return () => window.removeEventListener("pointermove", onMove);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      for (const item of items) {
+        item.x.tween.kill();
+        item.y.tween.kill();
+        item.rot.tween.kill();
+      }
+    };
   }, [root]);
 }
