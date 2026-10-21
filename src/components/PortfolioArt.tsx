@@ -79,3 +79,45 @@ export function ProjectArtwork({ index }: { index: number }) {
     </svg>
   );
 }
+
+/** Open pink illustrated box the hero panels emerge from. */
+export function OpenBox({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 560 250" className={className} aria-hidden="true">
+      <ellipse cx="280" cy="236" rx="235" ry="9" fill="oklch(0.18 0.01 60 / 12%)" />
+      {/* back flaps */}
+      <path d="M64 96 22 34 186 14 254 70Z" fill="#f6bcd4" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d="M496 96 538 34 374 14 306 70Z" fill="#f6bcd4" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
+      {/* interior */}
+      <path d="M72 100 122 74h316l50 26-46 24H118Z" fill="#d6338f" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
+      {/* sheet peeking out */}
+      <path d="M248 72h76l-9 52h-58Z" fill="#fff6e8" stroke="#5a1740" strokeWidth="2" />
+      <path d="M258 92h48m-50 14h44" stroke="#c9bfa8" strokeWidth="2" />
+      {/* front face + flaps */}
+      <path d="M78 118h404l-16 112H94Z" fill="#f9c8dd" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d="M78 118 24 152l58 78 56-30Z" fill="#f3a8c9" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d="M482 118l54 34-58 78-56-30Z" fill="#f3a8c9" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d="M136 150h80m-84 24h64m204-24h64m-72 24h58" stroke="#5a1740" strokeWidth="2" opacity=".35" />
+    </svg>
+  );
+}
+
+/** Broad sweeping pink ribbon that runs behind the page content. */
+export function PinkRibbon({ className, flip = false }: { className?: string; flip?: boolean }) {
+  return (
+    <svg viewBox="0 0 1600 620" preserveAspectRatio="none" className={className} aria-hidden="true" style={flip ? { transform: "scaleX(-1)" } : undefined}>
+      <defs>
+        <linearGradient id="ribbon-grad" x1="0" y1="0" x2="1" y2="0.4">
+          <stop offset="0" stopColor="#fbd2e5" />
+          <stop offset="0.45" stopColor="#f6a8cd" />
+          <stop offset="1" stopColor="#f9c4dd" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M-80 470 C 240 300, 480 560, 780 470 S 1300 160, 1680 250 L 1680 400 C 1330 320, 1060 600, 760 560 S 200 430, -80 560 Z"
+        fill="url(#ribbon-grad)"
+        opacity="0.5"
+      />
+    </svg>
+  );
+}
