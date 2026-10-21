@@ -331,3 +331,18 @@
   .scene:hover .scene-hover, .scene:hover .scene-image, .project-entry:hover .project-art { transform: none; }
   .nav-comet { display: none; }
 }
+
+/* Reference-style custom cursor (fine pointers only, motion-safe) */
+.has-custom-cursor, .has-custom-cursor * { cursor: none !important; }
+.custom-cursor { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
+.cursor-dot {
+  position: absolute; left: 0; top: 0; border-radius: 50%;
+  background: var(--ink);
+}
+.cursor-trail {
+  position: absolute; left: 0; top: 0; border-radius: 50%;
+  border: 1.5px solid oklch(0.18 0.01 60 / 45%);
+  display: flex; align-items: center; justify-content: center;
+  will-change: transform, width, height;
+}
+.cursor-label { font-size: 9px; color: var(--paper); opacity: 0; }
