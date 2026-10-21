@@ -1,98 +1,88 @@
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
 
 /**
- * Reference-style two-part cursor: a precise dot that tracks instantly and a
- * soft trailing shape that lags behind. Grows over anything marked
- * [data-cursor]; a big filled circle with a label over media/panels marked
- * data-cursor="view" (+ optional data-cursor-label).
+ * Reference-style cursor: a solid raspberry dot that tracks the pointer
+ * immediately, plus a short-lived soft pink brush tail that follows the
+ * recent motion path and fades fast (canvas, transform-only redraw).
  * Touch devices and prefers-reduced-motion keep the native cursor.
  */
 
-const DOT_SIZE = 8;
-const TRAIL_SIZE = 38;
-const TRAIL_LERP = 0.16; // lower = floatier trailing
-const VIEW_SIZE = 88;
+const DOT = 18;
+const TAIL_COLOR = "243,67,105"; // raspberry, rgb
+const TAIL_MS = 110; // how long the tail lives
+const MAX_POINTS = 40;
 
 export function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
   const dotRef = useRef<HTMLDivElement>(null);
-  const trailRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!fine || reduced) return;
-    setEnabled(true);
+    if (fine && !reduced) setEnabled(true);
   }, []);
 
   useEffect(() => {
     if (!enabled) return;
     const dot = dotRef.current!;
-    const trail = trailRef.current!;
-    const label = labelRef.current!;
-
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext("2d")!;
     document.documentElement.classList.add("has-custom-cursor");
 
-    const pos = { x: -100, y: -100 };
-    const trailPos = { x: -100, y: -100 };
-    let state: "default" | "link" | "view" = "default";
-    let raf = 0;
-
-    const setState = (next: typeof state) => {
-      if (next === state) return;
-      state = next;
-      const big = next === "view";
-      const mid = next === "link";
-      const size = big ? VIEW_SIZE : mid ? 58 : TRAIL_SIZE;
-      const color = big ? getComputedStyle(document.documentElement).getPropertyValue("--coral").trim() || "#e85d3a" : "";
-      gsap.to(trail, { width: size, height: size, duration: 0.35, ease: "power3.out" });
-      gsap.to(trail, {
-        backgroundColor: big ? color : "transparent",
-        borderColor: big ? "transparent" : "",
-        opacity: big ? 0.92 : next === "link" ? 0.9 : 0.55,
-        duration: 0.3,
-        ease: "power3.out",
-      });
-      gsap.to(dot, { scale: big || mid ? 0 : 1, duration: 0.25, ease: "power3.out" });
-      gsap.to(label, { opacity: 1, duration: 0.3 });
-      if (!big) label.textContent = "";
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
     };
+    resize();
+
+    let pos = { x: -100, y: -100 };
+    let history: { x: number; y: number; t: number }[] = [];
+    let raf = 0;
 
     const onMove = (e: PointerEvent) => {
       pos.x = e.clientX;
       pos.y = e.clientY;
-      const target = (e.target as HTMLElement | null)?.closest<HTMLElement>("[data-cursor]");
-      if (target) setState(target.dataset["cursor"] === "view" ? "view" : "link");
-      else setState("default");
+      dot.style.transform = `translate3d(${pos.x - DOT / 2}px, ${pos.y - DOT / 2}px, 0)`;
+      history.push({ x: pos.x, y: pos.y, t: performance.now() });
+      if (history.length > MAX_POINTS) history.shift();
     };
 
     const tick = () => {
-      trailPos.x += (pos.x - trailPos.x) * TRAIL_LERP;
-      trailPos.y += (pos.y - trailPos.y) * TRAIL_LERP;
-      dot.style.transform = `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
-      trail.style.transform = `translate(${trailPos.x}px, ${trailPos.y}px) translate(-50%, -50%)`;
+      const now = performance.now();
+      history = history.filter((p) => now - p.t < TAIL_MS);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Brush tail: overlapping soft circles along the recent path, fading fast.
+      for (let i = 1; i < history.length; i++) {
+        const a = history[i - 1];
+        const b = history[i];
+        const age = 1 - (now - b.t) / TAIL_MS; // 1 fresh -> 0 old
+        for (let s = 0; s <= 3; s++) {
+          const x = a.x + (b.x - a.x) * (s / 3);
+          const y = a.y + (b.y - a.y) * (s / 3);
+          const local = age * (s / 3 + (i / history.length) * 0.3);
+          if (local <= 0.02) continue;
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(${TAIL_COLOR},${(0.28 * local).toFixed(3)})`;
+          ctx.arc(x * dpr, y * dpr, (2 + 7 * local) * dpr, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
       raf = requestAnimationFrame(tick);
     };
 
-    const onLeave = () => {
-      gsap.to([dot, trail], { opacity: 0, duration: 0.2 });
-    };
-    const onEnter = () => {
-      gsap.to([dot, trail], { opacity: 1, duration: 0.2 });
-    };
-
     window.addEventListener("pointermove", onMove, { passive: true });
-    document.documentElement.addEventListener("pointerleave", onLeave);
-    document.documentElement.addEventListener("pointerenter", onEnter);
+    window.addEventListener("resize", resize);
     raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onMove);
-      document.documentElement.removeEventListener("pointerleave", onLeave);
-      document.documentElement.removeEventListener("pointerenter", onEnter);
+      window.removeEventListener("resize", resize);
       document.documentElement.classList.remove("has-custom-cursor");
     };
   }, [enabled]);
@@ -100,10 +90,8 @@ export function CustomCursor() {
   if (!enabled) return null;
   return (
     <div className="custom-cursor" aria-hidden="true">
-      <div ref={dotRef} className="cursor-dot" style={{ width: DOT_SIZE, height: DOT_SIZE }} />
-      <div ref={trailRef} className="cursor-trail" style={{ width: TRAIL_SIZE, height: TRAIL_SIZE }}>
-        <span ref={labelRef} className="cursor-label label-mono" />
-      </div>
+      <canvas ref={canvasRef} className="cursor-canvas" />
+      <div ref={dotRef} className="cursor-dot" style={{ width: DOT, height: DOT }} />
     </div>
   );
 }
