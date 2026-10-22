@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef } from "react";
-import portrait from "@/assets/arfa-me.jpeg.asset.json";
 import { usePointerDepth } from "@/components/usePointer";
 import { usePortfolioMotion } from "@/components/usePortfolioMotion";
-import { DrawnUnderline, IllustratedScenes, ProjectArtwork } from "@/components/PortfolioArt";
+import { DrawnUnderline, IllustratedScenes, OpenBox, PinkRibbon, ProjectArtwork } from "@/components/PortfolioArt";
+import { Folder } from "@/components/Doodles";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -25,6 +25,20 @@ const projects = [
 ];
 const skills = ["HTML", "CSS", "JavaScript", "React", "Tailwind CSS", "GSAP", "Git", "GitHub"];
 
+// Soft glowing confetti: electric blue, lime, coral — blurred spots that drift gently.
+const particles = [
+  { c: "electric", t: "12%", l: "9%", s: 22 }, { c: "lime", t: "9%", l: "26%", s: 14 },
+  { c: "coral", t: "20%", l: "16%", s: 16 }, { c: "electric", t: "34%", l: "6%", s: 18 },
+  { c: "lime", t: "52%", l: "10%", s: 24 }, { c: "coral", t: "70%", l: "7%", s: 15 },
+  { c: "electric", t: "84%", l: "15%", s: 20 }, { c: "lime", t: "16%", l: "84%", s: 18 },
+  { c: "coral", t: "9%", l: "70%", s: 15 }, { c: "electric", t: "28%", l: "92%", s: 22 },
+  { c: "lime", t: "46%", l: "89%", s: 14 }, { c: "coral", t: "62%", l: "93%", s: 19 },
+  { c: "electric", t: "78%", l: "88%", s: 24 }, { c: "lime", t: "90%", l: "76%", s: 15 },
+  { c: "coral", t: "88%", l: "42%", s: 17 }, { c: "electric", t: "40%", l: "30%", s: 12 },
+  { c: "lime", t: "26%", l: "44%", s: 13 }, { c: "coral", t: "58%", l: "62%", s: 12 },
+  { c: "electric", t: "66%", l: "36%", s: 14 }, { c: "lime", t: "74%", l: "58%", s: 13 },
+];
+
 function Home() {
   const root = useRef<HTMLDivElement>(null);
   usePointerDepth(root);
@@ -32,8 +46,11 @@ function Home() {
   return (
     <div ref={root} className="portfolio-page">
       <section className="hero-canvas editorial-boundary" aria-labelledby="intro-heading">
-        <div className="living-punctuation" aria-hidden="true">
-          {Array.from({ length: 10 }, (_, i) => <span key={i} data-punctuation className={`punctuation punctuation-${i}`}><span data-depth="0.4">{i % 3 === 0 ? "✳" : i % 3 === 1 ? "+" : "〰"}</span></span>)}
+        <PinkRibbon className="hero-ribbon" />
+        <div className="hero-particles" aria-hidden="true">
+          {particles.map((p, i) => (
+            <span key={i} data-particle className={`hero-particle hp-${p.c}`} style={{ top: p.t, left: p.l, width: p.s, height: p.s }} />
+          ))}
         </div>
         <div className="hero-story">
           <p className="hero-eyebrow label-mono" data-support>Arfa Munam · A work in curiosity</p>
@@ -42,21 +59,14 @@ function Home() {
             <span className="hero-role"><span data-a>a </span><span className="hl title-highlight" data-title-highlight><span data-title>Frontend Developer</span></span></span>
           </h1>
           <p className="hero-support font-display" data-support>
-            building playful digital experiences<br />
-            where code meets <span className="hl supporting-highlight">AI curiosity</span>.
+            and here's everything i know about<br />
+            building playful things where <span className="hl supporting-highlight">code meets AI</span>.
           </p>
           <DrawnUnderline />
         </div>
         <IllustratedScenes />
-        <div className="portrait-moment" data-portrait>
-          <figure className="portrait-fragment" data-depth="0.4" data-rot="1">
-            <img src={portrait.url} alt="Arfa Munam with her illustrated alter ego" width={768} height={1024} />
-          </figure>
-          <div className="portrait-note">
-            <span className="font-hand">the human behind the code</span>
-            <svg viewBox="0 0 130 44" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" aria-hidden="true"><path data-draw d="M122 8C62 2 90 37 8 27m9-7-9 7 11 7" /></svg>
-          </div>
-          <svg className="portrait-star" viewBox="0 0 30 30" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true"><path d="m15 3 3 10 10 2-10 3-3 10-3-10-10-3 10-2Z" /></svg>
+        <div className="hero-box" data-box>
+          <OpenBox className="hero-box-art" />
         </div>
         <div className="hero-bottom label-mono"><span>Interfaces · Experiments · Motion</span><a href="#work" className="link-draw">Selected work <span aria-hidden="true">↓</span></a></div>
       </section>
@@ -98,6 +108,8 @@ function Home() {
         <p className="tools-line label-mono"><span className="text-muted-foreground">Also in my toolkit</span> Claude · Lovable · Bolt · Vercel · Netlify</p>
       </section>
       <footer className="portfolio-footer editorial-boundary">
+        <PinkRibbon className="footer-ribbon" flip />
+        <Folder className="footer-folder" />
         <p className="font-display">Let's make something <em>delightful.</em></p>
         <div className="label-mono text-muted-foreground"><span>Arfa Munam</span><span>Made with curiosity · 2026</span><a href="#intro-heading" className="link-draw" aria-label="Back to top">↑ Back to top</a></div>
       </footer>
