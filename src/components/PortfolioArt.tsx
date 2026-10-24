@@ -80,24 +80,48 @@ export function ProjectArtwork({ index }: { index: number }) {
   );
 }
 
-/** Open pink illustrated box the hero panels emerge from. */
+/** Gradient open pink box the hero panels emerge from — matches the reference artwork. */
 export function OpenBox({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 560 250" className={className} aria-hidden="true">
-      <ellipse cx="280" cy="236" rx="235" ry="9" fill="oklch(0.18 0.01 60 / 12%)" />
-      {/* back flaps */}
-      <path d="M64 96 22 34 186 14 254 70Z" fill="#f6bcd4" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
-      <path d="M496 96 538 34 374 14 306 70Z" fill="#f6bcd4" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
-      {/* interior */}
-      <path d="M72 100 122 74h316l50 26-46 24H118Z" fill="#d6338f" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
-      {/* sheet peeking out */}
-      <path d="M248 72h76l-9 52h-58Z" fill="#fff6e8" stroke="#5a1740" strokeWidth="2" />
-      <path d="M258 92h48m-50 14h44" stroke="#c9bfa8" strokeWidth="2" />
-      {/* front face + flaps */}
-      <path d="M78 118h404l-16 112H94Z" fill="#f9c8dd" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
-      <path d="M78 118 24 152l58 78 56-30Z" fill="#f3a8c9" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
-      <path d="M482 118l54 34-58 78-56-30Z" fill="#f3a8c9" stroke="#5a1740" strokeWidth="2.5" strokeLinejoin="round" />
-      <path d="M136 150h80m-84 24h64m204-24h64m-72 24h58" stroke="#5a1740" strokeWidth="2" opacity=".35" />
+      <defs>
+        <linearGradient id="ob-lid" x1="0" y1="0" x2="1" y2="0.3">
+          <stop offset="0" stopColor="#fde4f3" />
+          <stop offset="0.7" stopColor="#f9b5dc" />
+          <stop offset="1" stopColor="#f9a2d4" />
+        </linearGradient>
+        <linearGradient id="ob-face" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#c81d86" />
+          <stop offset="1" stopColor="#9c0f6e" />
+        </linearGradient>
+        <linearGradient id="ob-right" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#f88fd0" />
+          <stop offset="0.55" stopColor="#f4b8e2" />
+          <stop offset="1" stopColor="#efdcf0" />
+        </linearGradient>
+        <linearGradient id="ob-flap" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#b0148a" />
+          <stop offset="1" stopColor="#8e0d63" />
+        </linearGradient>
+        <linearGradient id="ob-shadow" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#dcd7de" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#dcd7de" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {/* big pink circle rising behind the box */}
+      <circle cx="262" cy="200" r="112" fill="#f77fc4" />
+      {/* ground shadow streak */}
+      <path d="M30 226h426l92-9H62Z" fill="url(#ob-shadow)" />
+      {/* left lid raised open */}
+      <path d="M40 14 300 16 262 106 6 104Z" fill="url(#ob-lid)" />
+      {/* front-left face with warm ember */}
+      <path d="M28 106 262 106 256 222 20 224Z" fill="url(#ob-face)" />
+      <circle cx="254" cy="108" r="6" fill="#ff9440" opacity=".95" />
+      {/* right panel with carry handle */}
+      <path d="M298 16 462 18 450 222 292 222Z" fill="url(#ob-right)" />
+      <rect x="374" y="34" width="66" height="14" rx="7" fill="#a0127a" />
+      {/* right lid flap */}
+      <path d="M462 18 516 104 452 104Z" fill="url(#ob-flap)" />
     </svg>
   );
 }

@@ -25,6 +25,30 @@ const projects = [
 ];
 const skills = ["HTML", "CSS", "JavaScript", "React", "Tailwind CSS", "GSAP", "Git", "GitHub"];
 
+// SAMPLE colleague quotes written for placeholder purposes — swap in real
+// testimonials (names, roles, wording) when Arfa provides them.
+const testimonials = [
+  { name: "Ayesha K.", role: "Frontend Lead", bg: "linear-gradient(165deg, #ffd9e4, #ffc0d6)", avatar: "#f06292", quote: [
+    "Arfa built interfaces for our team with a polish you rarely see at her stage. She shipped responsive, production-ready React work and raised the bar with every review.",
+    "What sets her apart is curiosity — she prototypes an idea the same week she learns it, and her motion experiments often become features the whole team borrows.",
+  ] },
+  { name: "Zain R.", role: "Product Designer", bg: "linear-gradient(165deg, #bff2ec, #a9e6f2)", avatar: "#26a69a", quote: [
+    "She is an excellent collaborator. Arfa turns rough sketches into living interfaces, asks the right questions early, and never loses the playful spirit that makes her work feel alive.",
+  ] },
+  { name: "Mariam S.", role: "Design Mentor", bg: "linear-gradient(165deg, #ffe3a1, #ffedb8)", avatar: "#f9a825", quote: [
+    "I've mentored many students, and Arfa stands out. She learns fast, shares generously, and brings an AI-native workflow to everything she builds — always with real care for the people using it.",
+  ] },
+  { name: "Hassan T.", role: "Study Partner", bg: "linear-gradient(165deg, #d6c8f7, #e6dbfa)", avatar: "#7e57c2", quote: [
+    "Working through semesters with Arfa has been a delight. She breaks hard concepts into friendly explanations, and her curiosity is contagious — our whole study group codes better because of her.",
+  ] },
+  { name: "Bilal A.", role: "Dev Community", bg: "linear-gradient(165deg, #8ec4f8, #b0d4fa)", avatar: "#1e88e5", quote: [
+    "Arfa brings energy into every room, along with a steady stream of fresh ideas and a sharp eye for design. She keeps the bar high while making collaboration genuinely fun.",
+  ] },
+  { name: "Sana W.", role: "Bootcamp Facilitator", bg: "linear-gradient(165deg, #ffd8c2, #ffe4d0)", avatar: "#ff7043", quote: [
+    "Her projects balance craft and play beautifully. If something can be built with delight, Arfa will find the way — and probably add a small animation to make you smile.",
+  ] },
+];
+
 // Soft glowing confetti: electric blue, lime, coral — blurred spots that drift gently.
 const particles = [
   { c: "electric", t: "12%", l: "9%", s: 22 }, { c: "lime", t: "9%", l: "26%", s: 14 },
@@ -55,7 +79,7 @@ function Home() {
         <div className="hero-story">
           <p className="hero-eyebrow label-mono" data-support>Arfa Munam · A work in curiosity</p>
           <h1 id="intro-heading" className="hero-heading font-display">
-            <span className="text-mask"><span data-greeting>Hi, I'm <em>Arfa</em></span></span>
+            <span className="text-mask"><span data-greeting>Hi, I'm <em>Arfa</em> Munam</span></span>
             <span className="hero-role"><span data-a>a </span><span className="hl title-highlight" data-title-highlight><span data-title>Frontend Developer</span></span></span>
           </h1>
           <p className="hero-support font-display" data-support>
@@ -68,13 +92,14 @@ function Home() {
         <div className="hero-box" data-box>
           <OpenBox className="hero-box-art" />
         </div>
+        <div className="hero-outro" aria-hidden="true" />
         <div className="hero-bottom label-mono"><span>Interfaces · Experiments · Motion</span><a href="#work" className="link-draw">Selected work <span aria-hidden="true">↓</span></a></div>
       </section>
 
       <section id="work" className="work-section editorial-boundary" aria-labelledby="work-heading">
         <header className="work-heading" data-reveal>
           <svg data-scroll-drawing viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="m21 6 4 13 15 5-15 4-4 14-5-14-13-4 13-5Z" /><path d="m36 6 3 3m-3 0 3-3" /></svg>
-          <h2 id="work-heading" className="font-display">Selected <em>work</em></h2>
+          <h2 id="work-heading" className="font-display">🎨 Work 🌳</h2>
           <p className="label-mono text-muted-foreground">Archive in progress · 2025—26</p>
         </header>
         <div className="project-grid">
@@ -93,6 +118,24 @@ function Home() {
           ))}
         </div>
         <p className="archive-note font-hand">A few things taking shape. Real projects landing here soon.</p>
+      </section>
+
+      <section className="warm-section editorial-boundary" aria-labelledby="warm-heading">
+        <h2 id="warm-heading" className="warm-heading font-display" data-reveal>🎨 A few kind words from colleagues 🌳</h2>
+        <div className="warm-grid">
+          {testimonials.map((t) => (
+            <figure key={t.name} className="warm-card" data-reveal style={{ background: t.bg }}>
+              <div className="warm-head">
+                <span className="warm-avatar" style={{ background: t.avatar }}>{t.name.charAt(0)}</span>
+                <div>
+                  <strong className="warm-name font-display">{t.name}</strong>
+                  <span className="warm-role">{t.role}</span>
+                </div>
+              </div>
+              {t.quote.map((line) => <p key={line}>{line}</p>)}
+            </figure>
+          ))}
+        </div>
       </section>
 
       <section className="practice-section editorial-boundary" aria-labelledby="practice-heading">
